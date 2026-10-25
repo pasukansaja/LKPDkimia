@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LKPD Interaktif Kimia Kelas X — Struktur Atom &amp; Sistem Periodik Unsur</title>
+<style>
+:root{
+  --teal:#0d9488;--teal-d:#0f766e;--teal-x:#134e4a;--cyan:#0e7490;
+  --ink:#0f172a;--mut:#64748b;--line:#e2e8f0;--bg:#f1f5f9;--card:#ffffff;
+  --ok:#16a34a;--bad:#dc2626;--amber:#d97706;--indigo:#4f46e5;--orange:#ea580c;--rose:#e11d48;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;font-size:15.5px}
+sub,sup{font-size:.7em;line-height:0}
+b,strong{font-weight:700}
+button{font-family:inherit}
+
+/* ===== HERO ===== */
+.hero{position:relative;background:linear-gradient(135deg,#134e4a 0%,#0f766e 48%,#0e7490 100%);color:#fff;padding:34px 0 84px;border-radius:0 0 26px 26px;overflow:hidden}
+.hero:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 88% 12%,rgba(255,255,255,.16),transparent 42%),radial-gradient(circle at 8% 95%,rgba(255,255,255,.10),transparent 38%)}
+.hero-in{position:relative;max-width:900px;margin:0 auto;padding:0 18px}
+.hero .kicker{display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);padding:4px 12px;border-radius:999px;margin-bottom:12px}
+.hero h1{font-size:24px;line-height:1.35;font-weight:800;max-width:640px}
+.hero p.sub{opacity:.94;margin-top:10px;font-size:14.5px;max-width:660px}
+.badge-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.badge{border:1px solid rgba(255,255,255,.45);background:rgba(255,255,255,.13);padding:4px 13px;border-radius:999px;font-size:12.5px;font-weight:600;letter-spacing:.3px}
+
+/* ===== TOPBAR ===== */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:60;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);box-shadow:0 2px 12px rgba(15,23,42,.07);opacity:0;transform:translateY(-110%);transition:.28s}
+.topbar.show{opacity:1;transform:none}
+.topbar-in{max-width:900px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:9px 16px}
+.prog{flex:1;height:8px;background:#e2e8f0;border-radius:99px;overflow:hidden;min-width:60px}
+.prog>div{height:100%;width:0;background:linear-gradient(90deg,var(--teal),#22d3ee);border-radius:99px;transition:width .35s}
+.plabel{font-size:12.5px;font-weight:800;color:var(--teal-d);white-space:nowrap}
+.timer{font-variant-numeric:tabular-nums;font-weight:800;font-size:13.5px;color:var(--teal-d);background:#f0fdfa;border:1px solid #99f6e4;padding:4px 12px;border-radius:999px;white-space:nowrap;display:none}
+.timer.on{display:inline-block}
+.timer.warn{color:#b91c1c;background:#fef2f2;border-color:#fecaca;animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.5}}
+.icobtn{border:1px solid var(--line);background:#fff;width:36px;height:36px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:var(--mut);flex:none;transition:.15s}
+.icobtn:hover{border-color:var(--teal);color:var(--teal);background:#f0fdfa}
+.icobtn svg{width:18px;height:18px}
+
+/* ===== LAYOUT ===== */
+.wrap{max-width:900px;margin:0 auto;padding:0 16px 130px}
+.wrap.overlap{margin-top:-58px;position:relative;z-index:2}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 1px 3px rgba(15,23,42,.05);margin-bottom:18px}
+.card h2{font-size:17px;font-weight:800;color:var(--teal-x);margin-bottom:4px;display:flex;align-items:center;gap:9px}
+.card h2 .dot{width:9px;height:9px;border-radius:50%;background:var(--teal);flex:none}
+.card .lead{color:var(--mut);font-size:13.5px;margin-bottom:14px}
+
+/* identity */
+.idgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.idgrid .full{grid-column:1/-1}
+.field label{display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:5px}
+.field label .req{color:var(--bad)}
+.field input{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:10px 13px;font-size:14.5px;font-family:inherit;background:#f8fafc;transition:.15s;color:var(--ink)}
+.field input:focus{outline:none;border-color:var(--teal);background:#fff;box-shadow:0 0 0 3px rgba(13,148,136,.13)}
+.field input.err{border-color:var(--bad);background:#fef2f2}
+
+/* petunjuk */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{font-size:12.5px;font-weight:700;padding:5px 12px;border-radius:999px;background:#f0fdfa;color:var(--teal-d);border:1px solid #99f6e4}
+.chip.am{background:#fffbeb;color:#92400e;border-color:#fde68a}
+ol.howto{margin:6px 0 0 20px;display:grid;gap:6px}
+ol.howto li{font-size:14px;color:#334155}
+
+/* ===== SECTIONS ===== */
+.sec-head{margin:30px 0 14px;display:flex;align-items:flex-start;gap:13px}
+.sec-chip{flex:none;width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:#fff}
+.sec-head .t{font-size:17.5px;font-weight:800;color:var(--ink)}
+.sec-head .d{font-size:13px;color:var(--mut);margin-top:2px}
+.sec-A{background:linear-gradient(135deg,var(--teal),#0d9488)}
+.sec-B{background:linear-gradient(135deg,var(--indigo),#6d28d9)}
+.sec-C{background:linear-gradient(135deg,var(--orange),#f59e0b)}
+.sec-D{background:linear-gradient(135deg,var(--rose),#f43f5e)}
+
+/* question card */
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:19px 20px;box-shadow:0 1px 3px rgba(15,23,42,.05);margin-bottom:14px;scroll-margin-top:76px;transition:.2s}
+.qcard.miss{border-color:var(--amber);box-shadow:0 0 0 3px rgba(217,119,6,.13)}
+.qtop{display:flex;gap:11px;margin-bottom:10px}
+.qnum{flex:none;width:30px;height:30px;border-radius:9px;color:#fff;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center}
+.qcard[data-sec="A"] .qnum{background:var(--teal)}
+.qcard[data-sec="B"] .qnum{background:var(--indigo)}
+.qcard[data-sec="C"] .qnum{background:var(--orange)}
+.qcard[data-sec="D"] .qnum{background:var(--rose)}
+.qtext{font-size:15.5px;color:#1e293b}
+.qhint{margin-top:8px;font-size:12.5px;font-weight:700;color:var(--indigo);background:#eef2ff;border:1px solid #c7d2fe;border-radius:8px;padding:5px 11px;display:inline-block}
+.qhint.c{color:var(--orange);background:#fff7ed;border-color:#fed7aa}
+.qhint.d{color:var(--rose);background:#fff1f2;border-color:#fecdd3}
+
+/* options */
+.opts{margin-top:12px;display:grid;gap:9px}
+.opt{display:flex;gap:11px;align-items:flex-start;border:1.5px solid var(--line);border-radius:11px;padding:11px 13px;cursor:pointer;transition:.15s;background:#fff}
+.opt:hover{border-color:var(--teal)}
+.opt .ole{flex:none;width:26px;height:26px;border-radius:50%;border:1.5px solid #cbd5e1;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:800;color:#475569;margin-top:1px;transition:.15s;background:#fff}
+.opt .otx{font-size:14.5px;color:#1e293b;padding-top:1px}
+.opt .obox{flex:none;width:22px;height:22px;border-radius:6px;border:1.5px solid #cbd5e1;margin-top:3px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:900;background:#fff;transition:.15s}
+.opt .obox:after{content:'\2713';opacity:0}
+.opt.sel{border-color:var(--teal);background:#f0fdfa}
+.opt.sel .ole{background:var(--teal);border-color:var(--teal);color:#fff}
+.opt.sel .obox{background:var(--indigo);border-color:var(--indigo)}
+.opt.sel .obox:after{opacity:1}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+
+/* blanks */
+.blk{display:inline-block;position:relative;margin:0 3px}
+.blk input{border:none;border-bottom:2.5px dashed #94a3b8;background:#fffbeb;border-radius:8px 8px 0 0;width:110px;text-align:center;font-weight:800;font-size:15px;padding:6px 8px;font-family:inherit;color:var(--ink);transition:.15s}
+.blk input:focus{outline:none;border-bottom-color:var(--teal);background:#f0fdfa}
+.blk .bl{position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:800;color:var(--orange);background:#fff7ed;border:1px solid #fed7aa;border-radius:99px;padding:0 6px;line-height:1.5}
+
+/* essay */
+.essay textarea{width:100%;border:1.5px solid var(--line);border-radius:11px;padding:13px 15px;font-size:14.5px;font-family:inherit;min-height:130px;resize:vertical;background:#f8fafc;color:var(--ink);transition:.15s;margin-top:12px}
+.essay textarea:focus{outline:none;border-color:var(--rose);background:#fff;box-shadow:0 0 0 3px rgba(225,29,72,.1)}
+.ecount{text-align:right;font-size:12px;color:var(--mut);margin-top:5px;font-weight:600}
+.ecount.bad{color:var(--bad)}
+
+/* send area */
+.sendbox{text-align:center;padding:26px 22px}
+.sendbox .warn-note{font-size:13px;color:var(--mut);margin-top:12px}
+.btnrow{display:flex;gap:11px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.btn{border:none;border-radius:12px;padding:13px 26px;font-size:15px;font-weight:800;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:8px}
+.btn.pri{background:linear-gradient(135deg,var(--teal),var(--cyan));color:#fff;box-shadow:0 4px 14px rgba(13,148,136,.35)}
+.btn.pri:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(13,148,136,.45)}
+.btn.sec{background:#fff;color:var(--teal-d);border:1.5px solid #99f6e4}
+.btn.sec:hover{background:#f0fdfa}
+.btn.red{background:#b91c1c;color:#fff}
+.btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.foot{text-align:center;font-size:12.5px;color:var(--mut);padding:8px 0 20px}
+
+/* ===== MODAL ===== */
+.mwrap{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(15,23,42,.55);backdrop-filter:blur(3px)}
+.mwrap.show{display:flex}
+.modal{background:#fff;border-radius:18px;max-width:520px;width:100%;max-height:86vh;overflow:auto;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:mup .22s}
+@keyframes mup{from{transform:translateY(16px);opacity:0}}
+.modal h3{font-size:17px;font-weight:800;color:var(--teal-x);margin-bottom:10px}
+.modal p{font-size:14px;color:#334155}
+.mlist{background:#f8fafc;border:1px solid var(--line);border-radius:11px;padding:12px 16px;margin:12px 0;max-height:180px;overflow:auto}
+.mlist a,.mlist button{display:block;background:none;border:none;color:var(--teal-d);font-weight:700;font-size:13.5px;padding:4px 0;cursor:pointer;text-align:left;font-family:inherit;text-decoration:underline}
+.mrow{display:flex;gap:10px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
+.setrow{margin:12px 0}
+.setrow label{display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:5px}
+.setrow input[type=text]{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:10px 13px;font-size:13.5px;font-family:ui-monospace,Menlo,Consolas,monospace;background:#f8fafc}
+.setrow input[type=text]:focus{outline:none;border-color:var(--teal)}
+.snote{font-size:12.5px;color:var(--mut);background:#f8fafc;border:1px solid var(--line);border-radius:9px;padding:9px 12px;margin-top:10px}
+.status{display:inline-block;font-size:12px;font-weight:800;padding:4px 11px;border-radius:999px;margin-left:8px}
+.status.ok{background:#dcfce7;color:#166534}
+.status.no{background:#fee2e2;color:#991b1b}
+.spinner{display:inline-block;width:15px;height:15px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:-2px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===== TOAST ===== */
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);z-index:120;background:#0f172a;color:#fff;font-size:13.5px;font-weight:600;padding:11px 20px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;transition:.3s;max-width:90vw;text-align:center}
+#toast.show{transform:translateX(-50%);opacity:1}
+
+/* ===== RESULT ===== */
+.res-head{text-align:center;padding:8px 0 4px}
+.res-badge{display:inline-block;background:#dcfce7;color:#166534;font-weight:800;font-size:12.5px;letter-spacing:1px;text-transform:uppercase;border-radius:999px;padding:5px 15px;margin-bottom:12px}
+.res-badge.or{background:#fef3c7;color:#92400e}
+.score-big{font-size:54px;font-weight:900;color:var(--teal-d);line-height:1.1}
+.score-sub{font-size:14px;color:var(--mut);margin-top:2px}
+.res-chips{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin:16px 0 4px}
+.rchip{background:#f8fafc;border:1px solid var(--line);border-radius:11px;padding:8px 15px;font-size:12.5px;font-weight:700;color:#334155}
+.rchip b{color:var(--teal-d)}
+.review{margin-top:8px}
+.review details{border:1px solid var(--line);border-radius:11px;margin-bottom:9px;background:#fff;overflow:hidden}
+.review summary{cursor:pointer;padding:12px 15px;font-weight:700;font-size:14px;display:flex;align-items:center;gap:10px;list-style:none}
+.review summary::-webkit-details-marker{display:none}
+.review summary .st{flex:none;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:900;color:#fff}
+.st.ok{background:var(--ok)}.st.bad{background:var(--bad)}.st.part{background:var(--amber)}.st.man{background:#94a3b8}
+.review .rbody{padding:2px 16px 14px;font-size:14px;color:#334155}
+.rkey{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:9px;padding:9px 13px;margin-top:8px;font-size:13.5px}
+.rkey.w{background:#fef2f2;border-color:#fecaca}
+.rkey.n{background:#f8fafc;border-color:var(--line)}
+
+/* ===== PRINT ===== */
+@media print{
+  .topbar,.btnrow,.sendbox,.foot,#toast,.mwrap,.no-print{display:none!important}
+  body{background:#fff;font-size:12px}
+  .hero{border-radius:0;padding:18px}
+  .wrap.overlap{margin-top:0}
+  .card{box-shadow:none;break-inside:avoid}
+}
+@media (max-width:640px){
+  .idgrid{grid-template-columns:1fr}
+  .hero h1{font-size:20px}
+  .plabel{display:none}
+  .blk input{width:92px}
+  .btn{width:100%;justify-content:center}
+  .btnrow{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-in">
+    <span class="kicker">LKPD Interaktif &bull; Kimia Fase E</span>
+    <h1 id="hTitle">LKPD Struktur Atom &amp; Sistem Periodik Unsur</h1>
+    <p class="sub" id="hSub">Kerjakan soal-soal di bawah ini dengan teliti dan benar.  Begitu browser dibuka, waktu otomatis akan berjalan mundur selama 90 menit. Hasil jawaban akan terekam di google sheet guru mata pelajaran. Semangat Belajar !  By : PaSukan</p>
+   
+  </div>
+</header>
+
+<div class="topbar" id="topbar">
+  <div class="topbar-in">
+    <span class="plabel" id="progLabel">0/25</span>
+    <div class="prog"><div id="progBar"></div></div>
+    <span class="timer" id="timerChip">90:00</span>
+    <button class="icobtn" id="btnGear" title="Pengaturan koneksi Google Sheet (khusus guru)" aria-label="Pengaturan">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+    </button>
+  </div>
+</div>
+
+<main class="wrap overlap" id="mainWrap">
+
+  <section class="card" id="identCard">
+    <h2><span class="dot"></span>Identitas Peserta Didik</h2>
+    <p class="lead">Isi identitas terlebih dahulu sebelum mengerjakan soal. Nama dan kelas wajib diisi.</p>
+    <div class="idgrid">
+      <div class="field full"><label>Nama Lengkap <span class="req">*</span></label><input type="text" id="fNama" placeholder="Contoh: Aisyah Putri" autocomplete="name"></div>
+      <div class="field"><label>Kelas <span class="req">*</span></label><input type="text" id="fKelas" placeholder="Contoh: 10.A"></div>
+      <div class="field"><label>Nomor Absen / NIS (Jika lupa nda usah diisi (kosongkan) !</label><input type="text" id="fAbsen" placeholder="Contoh: 17"></div>
+    </div>
+  </section>
+
+  <section class="card" id="infoCard">
+    <h2><span class="dot"></span>Petunjuk Pengerjaan</h2>
+    <ol class="howto">
+      <li>Teliti sebelum menjawab. Kerjakan soal yang mudah terlebih dahulu.</li>
+      <li>Urutan bagian, urutan soal (nomor), dan urutan pilihan jawaban diacak secara otomatis, sehingga susunan lembar kerja Anda berbeda dengan teman sekelas. Contoh: Bagian B dapat muncul lebih dulu sebelum Bagian A.</li>
+      <li><b>Bagian A</b>: pilih <b>satu</b> jawaban yang paling tepat.</li>
+      <li><b>Bagian B</b>: pilih <b>semua</b> jawaban yang benar (jawaban benar lebih dari satu).</li>
+      <li><b>Bagian C</b>: lengkapi bagian yang rumpang dengan mengetik jawaban pada garis.</li>
+      <li><b>Bagian D</b>: jawab uraian secara jelas dan lengkap. Soal uraian dinilai langsung oleh guru.</li>
+      <li>Klik tombol <b>Kirim Jawaban</b> di bagian akhir. Jawaban tersimpan otomatis di perangkat ini selama dikerjakan.</li>
+    </ol>
+    <div class="chips">
+      <span class="chip">Bagian A: 12 PG (48 poin)</span>
+      <span class="chip">Bagian B: 4 PG Ganda (20 poin)</span>
+      <span class="chip">Bagian C: 4 Rumpang (12 poin)</span>
+      <span class="chip">Bagian D: 5 Essay (20 poin)</span>
+      <span class="chip am">Nilai otomatis maks 80 + essay 20 (akan diperiksa manual oleh guru)</span>
+    </div>
+  </section>
+
+  <div id="quiz"></div>
+
+  <section class="card sendbox" id="sendCard">
+    <h2 style="justify-content:center"><span class="dot"></span>Kirim Jawaban Anda</h2>
+    <p class="lead" style="margin-bottom:0">Periksa kembali jawaban Anda sebelum mengirim. Jawaban yang sudah terkirim tidak dapat diubah.</p>
+    <div class="btnrow">
+      <button class="btn sec" id="btnCheck">Periksa Soal Kosong</button>
+      <button class="btn pri" id="btnSend">Kirim Jawaban</button>
+    </div>
+    <p class="warn-note">Jawaban direkap otomatis ke Google Sheet guru melalui internet. Pastikan koneksi aktif saat mengirim.</p>
+  </section>
+
+  <footer class="foot">LKPD Interaktif Kimia Kelas X &mdash; Struktur Atom &amp; Sistem Periodik Unsur</footer>
+</main>
+
+<div class="mwrap" id="mwrap"><div class="modal" id="modalBox"></div></div>
+<div id="toast" role="status"></div>
+
+<script>
+
+'use strict';
+/* =====================================================================
+   LKPD INTERAKTIF — KIMIA KELAS X
+   Struktur Atom & Sistem Periodik Unsur (25 soal, kategori sedang)
+   ---------------------------------------------------------------------
+   PENGATURAN CEPAT UNTUK GURU:
+   Ubah data di bawah ini bila diperlukan. URL Apps Script dapat diisi
+   langsung di appsScriptUrl, atau lebih mudah lewat ikon roda gigi
+   di pojok kanan atas halaman (disimpan otomatis di browser).
+   ===================================================================== */
+const CONFIG = {
+  judul: 'Struktur Atom & Sistem Periodik Unsur',
+  mapel: 'Kimia',
+  tingkat: 'Kelas X (Fase E)',
+  guru: '',
+  sekolah: '',
+  durasiMenit: 90,                 // ubah 0 untuk menonaktifkan timer
+  acak: true,                      // true = urutan BAGIAN, nomor soal, & urutan opsi diacak berbeda untuk tiap siswa; false = urutan tetap
+  appsScriptUrl: 'https://script.google.com/macros/s/AKfycbxaWaE7nyX5ktGQ9ZtECch3980Qe0aXqXh2qXKBpPxCMZ0lQlv1RBsV2e4eqSKe4a-seg/exec',  // URL Web App rekap (sudah tertanam; ganti di sini bila deploy ulang)
+  simpanKey: 'lkpd-kimia-x-strukturatom',
+  minEssayChars: 15
+};
+
+/* Kunci jawaban disamarkan (basa64). Sumber: skrip perakitan. */
+const OBF = 'eyIxIjowLCIyIjoxLCIzIjowLCI0IjoxLCI1IjoyLCI2IjoyLCI3IjoxLCI4IjowLCI5IjoyLCIxMCI6MSwiMTEiOjEsIjEyIjowLCIxMyI6WzAsMSwyXSwiMTQiOlswLDEsMl0sIjE1IjpbMCwxLDJdLCIxNiI6WzAsMSwyXSwiMTciOnsiMSI6WyIxMiJdfSwiMTgiOnsiMSI6WyIxIl0sIjIiOlsiMyJdfSwiMTkiOnsiMSI6WyJ2aWEiLCI2YSIsIjE2Il0sIjIiOlsiMiIsImR1YSJdfSwiMjAiOnsiMSI6WyIxOSJdLCIyIjpbInMiXX19';
+let KUNCI = {};
+try { KUNCI = JSON.parse(atob(OBF)); } catch (e) { KUNCI = {}; }
+
+const LET = ['A', 'B', 'C', 'D', 'E', 'F'];
+
+/* ---------------------------- DATA SOAL ---------------------------- */
+const QUESTIONS = [
+  /* ===== BAGIAN A : PG SATU JAWABAN (12 x 4 poin) ===== */
+  { n: 1, sec: 'A', type: 'mc', poin: 4,
+    q: 'Perhatikan lambang atom <sup>24</sup><sub>12</sub>Mg. Jumlah proton, neutron, dan elektron dalam atom netral tersebut berturut-turut adalah ....',
+    opts: ['12 proton, 12 neutron, dan 12 elektron',
+           '12 proton, 24 neutron, dan 12 elektron',
+           '24 proton, 12 neutron, dan 12 elektron',
+           '12 proton, 12 neutron, dan 24 elektron',
+           '6 proton, 6 neutron, dan 12 elektron'] },
+  { n: 2, sec: 'A', type: 'mc', poin: 4,
+    q: 'Ilmuwan yang menyatakan bahwa atom merupakan bola pejal terkecil penyusun materi yang tidak dapat dibagi lagi adalah ....',
+    opts: ['J.J. Thomson', 'John Dalton', 'Ernest Rutherford', 'Niels Bohr', 'Werner Heisenberg'] },
+  { n: 3, sec: 'A', type: 'mc', poin: 4,
+    q: 'Konfigurasi elektron yang benar untuk atom dengan nomor atom 20 (Ca) adalah ....',
+    opts: ['1s<sup>2</sup> 2s<sup>2</sup> 2p<sup>6</sup> 3s<sup>2</sup> 3p<sup>6</sup> 4s<sup>2</sup>',
+           '1s<sup>2</sup> 2s<sup>2</sup> 2p<sup>8</sup> 3s<sup>2</sup> 3p<sup>6</sup> 4s<sup>2</sup>',
+           '1s<sup>2</sup> 2s<sup>4</sup> 2p<sup>6</sup> 3s<sup>2</sup> 3p<sup>6</sup> 4s<sup>2</sup>',
+           '1s<sup>2</sup> 2s<sup>2</sup> 2p<sup>6</sup> 3s<sup>4</sup> 3p<sup>6</sup> 4s<sup>2</sup>',
+           '1s<sup>2</sup> 2s<sup>2</sup> 2p<sup>6</sup> 3s<sup>2</sup> 3p<sup>6</sup> 4s<sup>1</sup> 4p<sup>1</sup>'] },
+  { n: 4, sec: 'A', type: 'mc', poin: 4,
+    q: 'Pasangan atom berikut yang merupakan isotop adalah ....',
+    opts: ['<sup>12</sup><sub>6</sub>C dan <sup>14</sup><sub>7</sub>N',
+           '<sup>35</sup><sub>17</sub>Cl dan <sup>37</sup><sub>17</sub>Cl',
+           '<sup>40</sup><sub>18</sub>Ar dan <sup>40</sup><sub>20</sub>Ca',
+           '<sup>3</sup><sub>1</sub>H dan <sup>3</sup><sub>2</sub>He',
+           '<sup>24</sup><sub>12</sub>Mg dan <sup>27</sup><sub>13</sub>Al'] },
+  { n: 5, sec: 'A', type: 'mc', poin: 4,
+    q: 'Menurut aturan 2n<sup>2</sup>, jumlah maksimum elektron yang dapat menempati kulit M (n = 3) adalah ....',
+    opts: ['2 elektron', '8 elektron', '18 elektron', '32 elektron', '9 elektron'] },
+  { n: 6, sec: 'A', type: 'mc', poin: 4,
+    q: 'Atom <sub>17</sub>Cl memiliki konfigurasi elektron 1s<sup>2</sup> 2s<sup>2</sup> 2p<sup>6</sup> 3s<sup>2</sup> 3p<sup>5</sup>. Elektron valensi atom tersebut berjumlah ....',
+    opts: ['1', '5', '7', '17', '10'] },
+  { n: 7, sec: 'A', type: 'mc', poin: 4,
+    q: 'Sistem periodik unsur modern yang digunakan saat ini disusun berdasarkan ....',
+    opts: ['massa atom relatif yang meningkat',
+           'kenaikan nomor atom',
+           'kemiripan sifat kimia sebagian unsur',
+           'jumlah neutron yang bertambah',
+           'massa jenis unsur yang meningkat'] },
+  { n: 8, sec: 'A', type: 'mc', poin: 4,
+    q: 'Unsur <sub>19</sub>K memiliki konfigurasi elektron 1s<sup>2</sup> 2s<sup>2</sup> 2p<sup>6</sup> 3s<sup>2</sup> 3p<sup>6</sup> 4s<sup>1</sup>. Dalam sistem periodik, unsur tersebut terletak pada ....',
+    opts: ['periode 4, golongan IA', 'periode 4, golongan IIA', 'periode 3, golongan IA',
+           'periode 4, golongan IB', 'periode 2, golongan IA'] },
+  { n: 9, sec: 'A', type: 'mc', poin: 4,
+    q: 'Unsur <sub>26</sub>Fe memiliki konfigurasi elektron [Ar] 3d<sup>6</sup> 4s<sup>2</sup>. Dalam sistem periodik, unsur tersebut terletak pada ....',
+    opts: ['blok s, golongan IIA', 'blok p, golongan VIIA', 'blok d, golongan VIIIB',
+           'blok f, golongan lantanida', 'blok s, golongan IA'] },
+  { n: 10, sec: 'A', type: 'mc', poin: 4,
+    q: 'Dalam satu periode, disusun dari kiri ke kanan, jari-jari atom cenderung ....',
+    opts: ['membesar karena jumlah kulit atom bertambah',
+           'mengecil karena muatan inti bertambah sehingga tarikan inti terhadap elektron valensi semakin kuat',
+           'tetap dan tidak mengalami perubahan',
+           'membesar karena jumlah elektron bertambah',
+           'berubah secara tidak tentu'] },
+  { n: 11, sec: 'A', type: 'mc', poin: 4,
+    q: 'Perhatikan konfigurasi elektron empat unsur berikut.<br>X : 2, 8, 2 &nbsp;&nbsp; Y : 2, 8, 6<br>Z : 2, 8, 8, 2 &nbsp;&nbsp; W : 2, 7<br>Pasangan unsur yang memiliki sifat kimia paling mirip (berada dalam satu golongan) adalah ....',
+    opts: ['X dan Y', 'X dan Z', 'Y dan W', 'Y dan Z', 'Z dan W'] },
+  { n: 12, sec: 'A', type: 'mc', poin: 4,
+    q: 'Unsur gas mulia (golongan VIIIA) memiliki energi ionisasi paling tinggi dibandingkan unsur lain dalam periodenya. Hal ini disebabkan oleh ....',
+    opts: ['konfigurasi elektron valensinya yang sangat stabil',
+           'jari-jari atomnya yang paling besar dalam periodenya',
+           'jumlah elektron valensinya yang paling sedikit',
+           'kemampuannya yang kuat dalam menarik elektron atom lain',
+           'jumlah kulit atomnya yang paling banyak'] },
+
+  /* ===== BAGIAN B : PG JAWABAN GANDA (4 x 5 poin) ===== */
+  { n: 13, sec: 'B', type: 'multi', poin: 5,
+    q: 'Pilihlah semua pernyataan yang <b>benar</b> mengenai model atom Bohr.',
+    opts: ['Elektron bergerak pada lintasan tertentu yang disebut tingkat energi atau keadaan stasioner',
+           'Elektron menyerap energi ketika berpindah ke tingkat energi yang lebih tinggi dan melepaskan energi ketika jatuh ke tingkat energi yang lebih rendah',
+           'Semakin jauh lintasan elektron dari inti, semakin tinggi energi elektron tersebut',
+           'Atom merupakan bola bermuatan positif dengan elektron tersebar di dalamnya seperti roti kismis',
+           'Elektron dapat bergerak bebas pada lintasan apa saja selama berada di dalam atom'] },
+  { n: 14, sec: 'B', type: 'multi', poin: 5,
+    q: 'Perhatikan konfigurasi elektron lima unsur berikut.<br>W : 1s<sup>2</sup> &nbsp;&nbsp; X : [Ne] 3s<sup>2</sup> &nbsp;&nbsp; Y : [Ar] 4s<sup>2</sup><br>Z : [Ne] 3s<sup>1</sup> &nbsp;&nbsp; T : [Ne] 3s<sup>2</sup> 3p<sup>1</sup><br>Pilihlah <b>semua</b> unsur yang terletak pada golongan alkali tanah (golongan IIA).',
+    opts: ['Unsur W', 'Unsur X', 'Unsur Y', 'Unsur Z', 'Unsur T'] },
+  { n: 15, sec: 'B', type: 'multi', poin: 5,
+    q: 'Pilihlah semua pernyataan yang <b>benar</b> tentang kaidah pengisian elektron pada orbital.',
+    opts: ['Berdasarkan prinsip aufbau, elektron mengisi orbital dengan tingkat energi terendah terlebih dahulu',
+           'Berdasarkan aturan Pauli, satu orbital maksimal menampung dua elektron dengan arah spin berlawanan',
+           'Berdasarkan aturan Hund, orbital sejenis yang masih kosong diisi satu elektron dengan spin sejajar terlebih dahulu sebelum dipasangkan',
+           'Orbital p mampu menampung maksimum 2 elektron',
+           'Kulit K (n = 1) mampu menampung maksimum 8 elektron'] },
+  { n: 16, sec: 'B', type: 'multi', poin: 5,
+    q: 'Pilihlah semua pernyataan yang <b>benar</b> mengenai sifat periodik unsur.',
+    opts: ['Dalam satu golongan dari atas ke bawah, jari-jari atom semakin besar karena jumlah kulit bertambah',
+           'Dalam satu periode dari kiri ke kanan, energi ionisasi cenderung bertambah',
+           'Keelektronegatifan unsur nonlogam umumnya lebih besar daripada unsur logam',
+           'Dalam satu golongan dari atas ke bawah, keelektronegatifan semakin besar',
+           'Dalam satu periode dari kiri ke kanan, jari-jari atom semakin besar'] },
+
+  /* ===== BAGIAN C : ISIAN RUMPANG (4 x 3 poin) ===== */
+  { n: 17, sec: 'C', type: 'blank', poin: 3,
+    q: 'Perhatikan lambang atom <sup>23</sup><sub>11</sub>Na. Jumlah neutron dalam atom netral tersebut adalah {1} neutron.' },
+  { n: 18, sec: 'C', type: 'blank', poin: 3,
+    q: 'Konfigurasi elektron atom <sub>13</sub>Al adalah 1s<sup>2</sup> 2s<sup>2</sup> 2p<sup>6</sup> 3s<sup>2</sup> 3p<sup>{1}</sup>. Dengan konfigurasi tersebut, jumlah elektron valensi atom aluminium adalah {2} elektron.' },
+  { n: 19, sec: 'C', type: 'blank', poin: 3,
+    q: 'Unsur <sub>8</sub>O dengan konfigurasi elektron 1s<sup>2</sup> 2s<sup>2</sup> 2p<sup>4</sup> menempati golongan {1} dan periode {2} dalam sistem periodik unsur.' },
+  { n: 20, sec: 'C', type: 'blank', poin: 3,
+    q: 'Unsur dengan konfigurasi elektron [Ar] 4s<sup>1</sup> memiliki nomor atom {1} dan terletak pada blok {2} dalam sistem periodik unsur.' },
+
+  /* ===== BAGIAN D : ESSAY / URAIAN (5 x 4 poin, dinilai guru) ===== */
+  { n: 21, sec: 'D', type: 'essay', poin: 4,
+    q: 'Bandingkan model atom Rutherford dengan model atom Bohr, kemudian jelaskan satu kelemahan model atom Rutherford dan bagaimana model atom Bohr memperbaiki kelemahan tersebut.' },
+  { n: 22, sec: 'D', type: 'essay', poin: 4,
+    q: 'Unsur X memiliki nomor atom 17. Tentukanlah: (a) konfigurasi elektron lengkap unsur X; (b) jumlah elektron valensinya; dan (c) letak unsur X dalam sistem periodik (golongan dan periode).' },
+  { n: 23, sec: 'D', type: 'essay', poin: 4,
+    q: 'Diketahui dua atom klorin: <sup>35</sup><sub>17</sub>Cl dan <sup>37</sup><sub>17</sub>Cl. Jelaskan: (a) istilah yang tepat untuk menyebut kedua atom tersebut beserta alasannya; (b) jumlah proton dan neutron pada masing-masing atom; dan (c) mengapa massa atom relatif klorin di alam tercatat sebesar 35,5.' },
+  { n: 24, sec: 'D', type: 'essay', poin: 4,
+    q: 'Unsur A bernomor atom 11 dan unsur B bernomor atom 17. Tentukanlah: (a) konfigurasi elektron serta golongan masing-masing unsur; (b) rumus senyawa yang terbentuk jika A dan B bereaksi beserta jenis ikatannya; dan (c) proses perpindahan elektron yang terjadi saat keduanya membentuk senyawa.' },
+  { n: 25, sec: 'D', type: 'essay', poin: 4,
+    q: 'Jelaskan mengapa energi ionisasi unsur dalam satu golongan semakin kecil jika dibaca dari atas ke bawah. Kaitkan penjelasan Anda dengan jari-jari atom dan tarikan inti terhadap elektron valensi, lalu berikan satu contoh sepasang unsur segolongan yang mendukung penjelasan tersebut.' }
+];
+
+const SEC_META = {
+  A: { judul: 'Bagian A — Pilihan Ganda (Satu Jawaban)',
+       desc: 'Pilih SATU jawaban yang paling tepat dengan mengklik salah satu pilihan.' },
+  B: { judul: 'Bagian B — Pilihan Ganda Jawaban Ganda',
+       desc: 'Pilih SEMUA jawaban yang benar. Jawaban benar dapat lebih dari satu. Skor parsial diberikan bila jawaban belum lengkap.' },
+  C: { judul: 'Bagian C — Isian Rumpang',
+       desc: 'Lengkapi bagian kalimat yang rumpang dengan mengetik jawaban pada garis yang tersedia.' },
+  D: { judul: 'Bagian D — Uraian (Essay)',
+       desc: 'Jawab dengan jelas dan lengkap. Soal uraian dinilai langsung oleh guru melalui Google Sheet.' }
+};
+
+/* ====================== PENGACAKAN PER SISWA ====================== */
+/* Setiap peserta didik memperoleh urutan BAGIAN (Bagian B dapat muncul
+   sebelum Bagian A), urutan soal (nomor tampil), dan urutan pilihan
+   jawaban yang berbeda. Urutan berlaku selama satu sesi tab
+   (sessionStorage); sesi baru / siswa lain memperoleh urutan baru.
+   Kunci jawaban tetap menunjuk nomor & opsi asli sehingga penilaian
+   otomatis dan rekap Google Sheet tidak berubah.                      */
+function shuffleArr(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
+const URUT_KEY = CONFIG.simpanKey + ':urutan-v3';
+
+function planValid(pl) {
+  if (!pl || !Array.isArray(pl.order) || pl.order.length !== QUESTIONS.length) { return false; }
+  const set = {};
+  QUESTIONS.forEach(function (q) { set[q.n] = true; });
+  let ok = true;
+  pl.order.forEach(function (n) { if (!set[n]) { ok = false; } });
+  if (!ok) { return false; }
+  if (!pl.opts) { return false; }
+  QUESTIONS.forEach(function (q) {
+    if (q.type === 'mc' || q.type === 'multi') {
+      const pm = pl.opts[q.n];
+      if (!Array.isArray(pm) || pm.length !== q.opts.length) { ok = false; return; }
+      const seen = {};
+      pm.forEach(function (v) { seen[v] = true; });
+      q.opts.forEach(function (_, i) { if (!seen[i]) { ok = false; } });
+    }
+  });
+  if (!ok) { return false; }
+  /* Validasi urutan bagian: harus memuat A, B, C, D tepat satu kali. */
+  if (!Array.isArray(pl.secs) || pl.secs.length !== 4) { return false; }
+  const seenSec = {};
+  pl.secs.forEach(function (s) { seenSec[s] = true; });
+  ['A', 'B', 'C', 'D'].forEach(function (s) { if (!seenSec[s]) { ok = false; } });
+  return ok;
+}
+
+function buildPlan() {
+  const SECS_ASLI = ['A', 'B', 'C', 'D'];
+  if (CONFIG.acak === false) {
+    const order0 = QUESTIONS.map(function (q) { return q.n; });
+    const opts0 = {};
+    QUESTIONS.forEach(function (q) {
+      if (q.type === 'mc' || q.type === 'multi') { opts0[q.n] = q.opts.map(function (_, i) { return i; }); }
+    });
+    return { order: order0, opts: opts0, secs: SECS_ASLI.slice(), acak: false };
+  }
+  let saved = null;
+  try { saved = JSON.parse(sessionStorage.getItem(URUT_KEY) || 'null'); } catch (e) { saved = null; }
+  if (planValid(saved)) { return saved; }
+  /* Urutan bagian ikut diacak: contohnya C-A-D-B (Bagian B bisa muncul
+     sebelum Bagian A). Soal tetap berkelompok per bagian dengan header
+     bagian masing-masing, hanya urutan kemunculan bagian yang berbeda. */
+  const secs = shuffleArr(SECS_ASLI.slice());
+  const order = [];
+  secs.forEach(function (sec) {
+    const list = QUESTIONS.filter(function (q) { return q.sec === sec; }).map(function (q) { return q.n; });
+    shuffleArr(list);
+    list.forEach(function (n) { order.push(n); });
+  });
+  const opts = {};
+  QUESTIONS.forEach(function (q) {
+    if (q.type === 'mc' || q.type === 'multi') {
+      const pm = q.opts.map(function (_, i) { return i; });
+      shuffleArr(pm);
+      opts[q.n] = pm;
+    }
+  });
+  const pl = { order: order, opts: opts, secs: secs, acak: true, ts: Date.now() };
+  try { sessionStorage.setItem(URUT_KEY, JSON.stringify(pl)); } catch (e) {}
+  return pl;
+}
+
+const PLAN = buildPlan();
+
+/* Nomor tampil (1..25) dari nomor asli soal. */
+function dispN(n) { return PLAN.order.indexOf(n) + 1; }
+/* Nomor asli soal dari nomor tampil. */
+function asliN(d) { return PLAN.order[d - 1]; }
+/* Urutan bagian sesuai tampilan siswa (mis. ['C','A','D','B']). */
+function urutBagian() { return (PLAN && PLAN.secs) ? PLAN.secs : ['A', 'B', 'C', 'D']; }
+/* Posisi tampil (0-based) dari indeks opsi asli. */
+function optPos(n, idx) { return PLAN.opts && PLAN.opts[n] ? PLAN.opts[n].indexOf(idx) : idx; }
+/* Indeks opsi asli dari posisi tampil. */
+function optAsli(n, pos) { return PLAN.opts && PLAN.opts[n] ? PLAN.opts[n][pos] : pos; }
+
+/* ============================ UTIL ============================ */
+function el(sel) { return document.querySelector(sel); }
+function esc(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function norm(s) { return String(s == null ? '' : s).trim().toLowerCase().replace(/\s+/g, ''); }
+function tokensOf(q) {
+  const out = []; const re = /\{(\d+)\}/g; let m;
+  while ((m = re.exec(q.q)) !== null) { out.push(parseInt(m[1], 10)); }
+  return out;
+}
+function secClass(sec) { return 'sec-' + sec; }
+
+/* ========================= RENDER QUIZ ========================= */
+function renderQuiz() {
+  const root = el('#quiz');
+  let html = '';
+  let curSec = null;
+  PLAN.order.forEach(function (n, pos) {
+    const q = byN(n);
+    if (q.sec !== curSec) {
+      curSec = q.sec;
+      const meta = SEC_META[curSec];
+      html += '<div class="sec-head"><div class="sec-chip ' + secClass(curSec) + '">' + curSec + '</div>' +
+        '<div><div class="t">' + meta.judul + '</div><div class="d">' + meta.desc + '</div></div></div>';
+    }
+    html += renderCard(q, pos + 1);
+  });
+  root.innerHTML = html;
+  bindCards();
+}
+
+function renderCard(q, dispNo) {
+  let h = '<section class="qcard" id="qc' + q.n + '" data-sec="' + q.sec + '" data-n="' + q.n + '" data-d="' + dispNo + '">' +
+    '<div class="qtop"><div class="qnum">' + dispNo + '</div><div class="qtext">' + q.q;
+  if (q.type === 'multi') {
+    h += '<div style="margin-top:8px"><span class="qhint">Pilih semua jawaban yang benar (lebih dari satu)</span></div>';
+  }
+  h += '</div></div>';
+
+  if (q.type === 'mc' || q.type === 'multi') {
+    h += '<div class="opts">';
+    const pm = (PLAN.opts && PLAN.opts[q.n]) ? PLAN.opts[q.n] : q.opts.map(function (_, i) { return i; });
+    pm.forEach(function (origIdx, pos) {
+      const opt = q.opts[origIdx];
+      const inputType = q.type === 'mc' ? 'radio' : 'checkbox';
+      h += '<label class="opt"><input type="' + inputType + '" name="q' + q.n + '" value="' + origIdx + '">' +
+        (q.type === 'mc'
+          ? '<span class="ole">' + LET[pos] + '</span><span class="otx">' + opt + '</span>'
+          : '<span class="obox"></span><span class="otx">' + opt + '</span>') +
+        '</label>';
+    });
+    h += '</div>';
+  } else if (q.type === 'blank') {
+    const parts = q.q.split(/\{(\d+)\}/);
+    let inner = '';
+    for (let i = 0; i < parts.length; i++) {
+      if (i % 2 === 0) { inner += parts[i]; }
+      else {
+        const bIdx = parts[i];
+        const lab = String.fromCharCode(96 + (i + 1) / 2);
+        inner += '<span class="blk"><span class="bl">' + lab + '</span>' +
+          '<input type="text" data-q="' + q.n + '" data-b="' + bIdx + '" maxlength="40" autocomplete="off" aria-label="Isian ' + lab + ' soal nomor tampil ' + dispNo + '"></span>';
+      }
+    }
+    h += '<div class="qtext" style="margin-top:4px">' + inner + '</div>';
+  } else if (q.type === 'essay') {
+    h += '<div class="essay"><textarea data-essay="' + q.n + '" placeholder="Tulis jawaban Anda di sini ..." aria-label="Jawaban uraian soal nomor tampil ' + dispNo + '"></textarea>' +
+      '<div class="ecount" id="ec' + q.n + '">0 karakter (minimal ' + CONFIG.minEssayChars + ')</div></div>';
+  }
+  h += '</section>';
+  return h;
+}
+
+function bindCards() {
+  document.querySelectorAll('.qcard').forEach(function (card) {
+    const n = parseInt(card.dataset.n, 10);
+    const q = byN(n);
+    if (q.type === 'mc') {
+      card.querySelectorAll('input[type=radio]').forEach(function (inp) {
+        inp.addEventListener('change', function () {
+          S.ans[n] = parseInt(inp.value, 10);
+          refreshOpts(card, n);
+          afterAnswerChange();
+        });
+      });
+    } else if (q.type === 'multi') {
+      card.querySelectorAll('input[type=checkbox]').forEach(function (inp) {
+        inp.addEventListener('change', function () {
+          const sel = [];
+          card.querySelectorAll('input[type=checkbox]').forEach(function (c) {
+            if (c.checked) { sel.push(parseInt(c.value, 10)); }
+          });
+          S.ans[n] = sel;
+          refreshOpts(card, n);
+          afterAnswerChange();
+        });
+      });
+    } else if (q.type === 'blank') {
+      card.querySelectorAll('input[type=text]').forEach(function (inp) {
+        inp.addEventListener('input', function () {
+          if (typeof S.ans[n] !== 'object' || S.ans[n] === null) { S.ans[n] = {}; }
+          S.ans[n][inp.dataset.b] = inp.value;
+          afterAnswerChange();
+        });
+      });
+    } else if (q.type === 'essay') {
+      const ta = card.querySelector('textarea');
+      ta.addEventListener('input', function () {
+        S.ans[n] = ta.value;
+        updateEssayCount(n);
+        afterAnswerChange();
+      });
+    }
+  });
+}
+
+function refreshOpts(card, n) {
+  const val = S.ans[n];
+  card.querySelectorAll('.opt input').forEach(function (inp) {
+    const i = parseInt(inp.value, 10); // indeks opsi asli
+    const on = Array.isArray(val) ? val.indexOf(i) !== -1 : val === i;
+    inp.closest('.opt').classList.toggle('sel', on);
+  });
+}
+
+function updateEssayCount(n) {
+  const box = el('#ec' + n); if (!box) return;
+  const len = ((S.ans[n] || '') + '').trim().length;
+  box.textContent = len + ' karakter (minimal ' + CONFIG.minEssayChars + ')';
+  box.classList.toggle('bad', len > 0 && len < CONFIG.minEssayChars);
+}
+
+function byN(n) {
+  for (let i = 0; i < QUESTIONS.length; i++) { if (QUESTIONS[i].n === n) { return QUESTIONS[i]; } }
+  return null;
+}
+
+/* ========================= PROGRESS ========================= */
+function isAnswered(q) {
+  const a = S.ans[q.n];
+  if (q.type === 'mc') { return typeof a === 'number'; }
+  if (q.type === 'multi') { return Array.isArray(a) && a.length > 0; }
+  if (q.type === 'blank') {
+    if (!a || typeof a !== 'object') { return false; }
+    return tokensOf(q).every(function (t) { return String(a[t] == null ? '' : a[t]).trim() !== ''; });
+  }
+  if (q.type === 'essay') { return typeof a === 'string' && a.trim().length > 0; }
+  return false;
+}
+
+function updateProgress() {
+  let c = 0;
+  QUESTIONS.forEach(function (q) { if (isAnswered(q)) { c++; } });
+  const pct = Math.round((c / QUESTIONS.length) * 100);
+  el('#progBar').style.width = pct + '%';
+  el('#progLabel').textContent = c + '/' + QUESTIONS.length;
+  return c;
+}
+
+function afterAnswerChange() {
+  updateProgress();
+  saveState();
+}
+
+/* ========================= STATE ========================= */
+let S = { ans: {}, start: null, submitted: false, payload: null, nilai: null, results: null, sentOk: null };
+let IDENT = { nama: '', kelas: '', absen: '' };
+let tId = null;
+
+const LS = {
+  read: function () {
+    try { return JSON.parse(localStorage.getItem(CONFIG.simpanKey) || '{}'); }
+    catch (e) { return {}; }
+  },
+  write: function (obj) {
+    try { localStorage.setItem(CONFIG.simpanKey, JSON.stringify(obj)); } catch (e) {}
+  }
+};
+
+function saveState() {
+  LS.write({ v: 1, ans: S.ans, start: S.start, submitted: S.submitted,
+    payload: S.payload, nilai: S.nilai, results: S.results, sentOk: S.sentOk, ident: IDENT });
+}
+
+function restoreState() {
+  const st = LS.read();
+  if (!st || st.v !== 1) { return; }
+  S.ans = st.ans || {}; S.start = st.start || null; S.submitted = !!st.submitted;
+  S.payload = st.payload || null; S.nilai = (typeof st.nilai === 'number') ? st.nilai : null;
+  S.results = st.results || null; S.sentOk = st.sentOk || null;
+  IDENT = st.ident || IDENT;
+  const f1 = el('#fNama'), f2 = el('#fKelas'), f3 = el('#fAbsen');
+  if (f1) { f1.value = IDENT.nama || ''; } if (f2) { f2.value = IDENT.kelas || ''; }
+  if (f3) { f3.value = IDENT.absen || ''; }
+}
+
+/* ========================= TOAST & MODAL ========================= */
+let toastTid = null;
+function toast(msg, ms) {
+  const t = el('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTid);
+  toastTid = setTimeout(function () { t.classList.remove('show'); }, ms || 3200);
+}
+function openModal(html) { el('#modalBox').innerHTML = html; el('#mwrap').classList.add('show'); }
+function closeModal() { el('#mwrap').classList.remove('show'); }
+
+/* ========================= TIMER ========================= */
+function initTimer() {
+  const chip = el('#timerChip');
+  if (!CONFIG.durasiMenit || CONFIG.durasiMenit <= 0) { return; }
+  chip.classList.add('on');
+  if (!S.start && !S.submitted) { S.start = Date.now(); saveState(); }
+  tick();
+  tId = setInterval(tick, 1000);
+}
+function tick() {
+  const chip = el('#timerChip');
+  if (!chip) { return; }
+  if (S.submitted) { chip.textContent = 'Selesai'; chip.classList.remove('warn'); if (tId) { clearInterval(tId); tId = null; } return; }
+  const total = CONFIG.durasiMenit * 60;
+  const rem = Math.max(0, Math.ceil(total - (Date.now() - S.start) / 1000));
+  const m = Math.floor(rem / 60), s = rem % 60;
+  chip.textContent = 'Sisa waktu ' + m + ':' + (s < 10 ? '0' + s : s);
+  chip.classList.toggle('warn', rem <= 600);
+  if (rem <= 0) {
+    if (tId) { clearInterval(tId); tId = null; }
+    autoSubmit();
+  }
+}
+function autoSubmit() {
+  if (S.submitted) { return; }
+  if (!IDENT.nama.trim() || !IDENT.kelas.trim()) {
+    toast('Waktu habis! Isi nama dan kelas Anda, lalu klik Kirim Jawaban.');
+    const f = el('#fNama'); if (f) { f.focus(); }
+    return;
+  }
+  sendFlow(true);
+}
+
+/* ========================= VALIDASI ========================= */
+function collectMissing() {
+  const miss = [];
+  QUESTIONS.forEach(function (q) {
+    if (!isAnswered(q)) { miss.push(q.n); }
+    else if (q.type === 'essay') {
+      if (((S.ans[q.n] || '') + '').trim().length < CONFIG.minEssayChars) { miss.push(q.n); }
+    }
+  });
+  return miss;
+}
+function markMissing(list) {
+  document.querySelectorAll('.qcard').forEach(function (c) { c.classList.remove('miss'); });
+  list.forEach(function (n) { const c = el('#qc' + n); if (c) { c.classList.add('miss'); } });
+}
+
+/* ========================= PAYLOAD & SKOR ========================= */
+function ansLetters(n) {
+  const a = S.ans[n];
+  if (Array.isArray(a)) { return a.slice().sort(function (x, y) { return x - y; }).map(function (i) { return LET[i]; }).join(','); }
+  if (typeof a === 'number') { return LET[a]; }
+  return '';
+}
+/* Huruf sesuai urutan tampil yang dilihat siswa (opsi diacak). */
+function ansLettersDisp(n) {
+  const a = S.ans[n];
+  if (Array.isArray(a)) {
+    return a.slice().sort(function (x, y) { return optPos(n, x) - optPos(n, y); })
+      .map(function (i) { return LET[optPos(n, i)]; }).join(', ');
+  }
+  if (typeof a === 'number') { return LET[optPos(n, a)]; }
+  return '';
+}
+function kunciLettersDisp(n) {
+  const k = KUNCI[n];
+  if (Array.isArray(k)) {
+    return k.slice().sort(function (x, y) { return optPos(n, x) - optPos(n, y); })
+      .map(function (i) { return LET[optPos(n, i)]; }).join(', ');
+  }
+  if (typeof k === 'number') { return LET[optPos(n, k)]; }
+  return '';
+}
+function buildPayload() {
+  const jaw = {};
+  QUESTIONS.forEach(function (q) {
+    const a = S.ans[q.n];
+    if (q.type === 'mc' || q.type === 'multi') { jaw[q.n] = ansLetters(q.n); }
+    else if (q.type === 'blank') {
+      const toks = tokensOf(q); const parts = [];
+      toks.forEach(function (t) { parts.push(String((a || {})[t] == null ? '' : a[t]).trim()); });
+      jaw[q.n] = parts.join(' | ');
+    } else { jaw[q.n] = String(a == null ? '' : a).trim(); }
+  });
+  const dur = S.start ? Math.round((Date.now() - S.start) / 1000) : 0;
+  const sk = scoreAll(); /* skor dihitung SAAT pengiriman agar nilai ikut terkirim ke rekap guru */
+  return {
+    app: 'LKPD-KIMIA-X', judul: CONFIG.judul, mapel: CONFIG.mapel, tingkat: CONFIG.tingkat,
+    nama: IDENT.nama.trim(), kelas: IDENT.kelas.trim(), absen: IDENT.absen.trim(),
+    durasiDetik: dur, waktu: new Date().toISOString(), jawaban: jaw,
+    nilaiOtomatis: sk.total, /* angka Bagian A-C, maks 80 (mis. 78.5) */
+    acak: CONFIG.acak !== false,
+    urutanBagian: urutBagian().join('-'), /* mis. 'C-A-D-B' (urutan bagian yang dilihat siswa) */
+    urutanSoal: PLAN.order.join(',') /* urutan nomor tampil yang dilihat siswa */
+  };
+}
+
+function scoreAll() {
+  let total = 0; const res = {};
+  QUESTIONS.forEach(function (q) {
+    const k = KUNCI[q.n]; const a = S.ans[q.n]; let r;
+    if (q.type === 'mc') {
+      r = (a === k) ? { st: 'ok', sk: q.poin } : { st: 'bad', sk: 0 };
+    } else if (q.type === 'multi') {
+      const sel = Array.isArray(a) ? a : [];
+      let nC = 0, nW = 0;
+      sel.forEach(function (x) { if (k.indexOf(x) !== -1) { nC++; } else { nW++; } });
+      const sk = Math.max(0, Math.round(((nC - nW) / k.length) * q.poin * 2) / 2);
+      r = { st: sk === q.poin ? 'ok' : (sk > 0 ? 'part' : 'bad'), sk: sk };
+    } else if (q.type === 'blank') {
+      const toks = tokensOf(q); const per = q.poin / toks.length; let sk = 0;
+      toks.forEach(function (t) {
+        const v = norm((a || {})[t]);
+        const acc = (k && k[t] ? k[t] : []).map(norm);
+        if (!v) { return; }
+        if (acc.indexOf(v) !== -1) { sk += per; }
+        else if (acc.some(function (x) { return !isNaN(parseFloat(x)) && !isNaN(parseFloat(v)) && parseFloat(x) === parseFloat(v); })) { sk += per; }
+      });
+      sk = Math.round(sk * 2) / 2;
+      r = { st: sk === q.poin ? 'ok' : (sk > 0 ? 'part' : 'bad'), sk: sk };
+    } else {
+      r = { st: 'man', sk: 0 };
+    }
+    total += r.sk; res[q.n] = r;
+  });
+  return { total: Math.round(total * 2) / 2, res: res };
+}
+
+/* ========================= KIRIM KE GOOGLE SHEET ========================= */
+function getUrl() {
+  const v = (localStorage.getItem(CONFIG.simpanKey + ':url') || '').trim();
+  return v || (CONFIG.appsScriptUrl || '').trim();
+}
+async function kirimData(payload) {
+  const url = getUrl();
+  if (!url) { const e = new Error('URL Apps Script belum diatur.'); e.code = 'nourl'; throw e; }
+  try {
+    const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload), redirect: 'follow' });
+    const txt = await r.text();
+    let j = null; try { j = JSON.parse(txt); } catch (e) {}
+    if (j && j.status === 'ok') { return { ok: true }; }
+    throw new Error(j && j.message ? j.message : 'Respons tidak dikenal dari server.');
+  } catch (err) {
+    if (err.code === 'nourl') { throw err; }
+    try {
+      await fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload) });
+      return { ok: true, silent: true };
+    } catch (e2) {
+      const e3 = new Error('Tidak dapat menghubungi Google Sheets. Periksa koneksi internet.'); e3.code = 'net'; throw e3;
+    }
+  }
+}
+
+/* ========================= ALUR KIRIM ========================= */
+function sendFlow(auto) {
+  if (S.submitted) { toast('Jawaban Anda sudah pernah dikirim.'); return; }
+  const f1 = el('#fNama'), f2 = el('#fKelas'), f3 = el('#fAbsen');
+  IDENT.nama = (f1 ? f1.value : IDENT.nama) || '';
+  IDENT.kelas = (f2 ? f2.value : IDENT.kelas) || '';
+  IDENT.absen = (f3 ? f3.value : IDENT.absen) || '';
+  const bad = [];
+  if (!IDENT.nama.trim()) { bad.push('nama'); if (f1) { f1.classList.add('err'); } }
+  if (!IDENT.kelas.trim()) { bad.push('kelas'); if (f2) { f2.classList.add('err'); } }
+  if (bad.length) {
+    toast('Isi terlebih dahulu: ' + bad.join(' dan ') + ' Anda.');
+    const first = bad[0] === 'nama' ? el('#fNama') : el('#fKelas');
+    if (first) { first.focus(); first.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    return;
+  }
+  const miss = collectMissing();
+  let listHtml = '';
+  if (miss.length) {
+    listHtml = '<div class="mlist"><b style="font-size:13px;color:#92400e">Belum dijawab / belum lengkap: ' +
+      miss.length + ' soal</b>' + miss.map(function (n) {
+        return '<button type="button" data-jump="' + n + '">Soal nomor ' + dispN(n) + '</button>';
+      }).join('') + '</div>';
+  }
+  openModal('<h3>' + (auto ? 'Waktu Habis' : 'Konfirmasi Pengiriman') + '</h3>' +
+    '<p>' + (auto ? 'Waktu pengerjaan telah berakhir. Jawaban yang sudah terisi akan dikirim sekarang.' :
+    'Periksa kembali jawaban Anda sebelum mengirim.') + '</p>' + listHtml +
+    '<div class="mrow">' +
+    (auto ? '' : '<button class="btn sec" id="mFix">Perbaiki Jawaban</button>') +
+    '<button class="btn pri" id="mGo">Kirim Jawaban</button></div>');
+  const fix = el('#mFix'); if (fix) { fix.onclick = closeModal; }
+  el('#mGo').onclick = function () { closeModal(); doSend(); };
+  el('#modalBox').querySelectorAll('[data-jump]').forEach(function (b) {
+    b.onclick = function () {
+      closeModal();
+      const c = el('#qc' + b.dataset.jump);
+      if (c) { c.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    };
+  });
+}
+
+async function doSend() {
+  const btn = el('#btnSend');
+  const payload = buildPayload();
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Mengirim ...'; }
+  try {
+    const out = await kirimData(payload);
+    const sk = scoreAll();
+    S.payload = payload; S.nilai = sk.total; S.results = sk.res;
+    S.submitted = true; S.sentOk = out.silent ? 'silent' : 'ok';
+    saveState();
+    showResult();
+    toast('Jawaban berhasil terkirim ke Google Sheet guru.');
+  } catch (err) {
+    const sk = scoreAll();
+    S.payload = payload; S.nilai = sk.total; S.results = sk.res; S.sentOk = 'fail';
+    saveState();
+    showResult();
+    if (err.code === 'nourl') {
+      toast('Guru belum menyiapkan koneksi Google Sheet. Jawaban tersimpan di perangkat ini.', 6000);
+    } else {
+      toast('Gagal terkirim: ' + err.message + ' Anda dapat mengirim ulang dari layar hasil.', 6000);
+    }
+  }
+}
+
+/* ========================= HASIL ========================= */
+function showResult() {
+  const sk = (S.results && typeof S.nilai === 'number') ? { total: S.nilai, res: S.results } : scoreAll();
+  if (tId) { clearInterval(tId); tId = null; }
+  const tc = el('#timerChip'); if (tc) { tc.textContent = 'Selesai'; tc.classList.remove('warn'); }
+  el('#progBar').style.width = '100%'; el('#progLabel').textContent = QUESTIONS.length + '/' + QUESTIONS.length;
+  const main = el('#mainWrap');
+  let h = '<section class="card res-head">' +
+    (S.sentOk === 'ok' ? '<span class="res-badge">Jawaban Terkirim</span>' :
+     S.sentOk === 'silent' ? '<span class="res-badge or">Jawaban Terkirim (Mode Sederhana)</span>' :
+     '<span class="res-badge or">Belum Terkirim ke Google Sheet</span>') +
+    '<div class="score-big">' + sk.total + '<span style="font-size:26px;color:#64748b;font-weight:700"> / 80</span></div>' +
+    '<div class="score-sub">Nilai otomatis Bagian A-C. Bagian D (essay, 20 poin) dinilai langsung oleh guru.</div>' +
+    '<div class="res-chips">' + secChips(sk.res) + '</div>';
+  if (S.sentOk === 'silent') {
+    h += '<p style="font-size:13px;color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:9px 13px;display:inline-block;margin-top:10px">Terkirim dalam mode sederhana. Guru dapat memastikan datanya di Google Sheet.</p>';
+  }
+  if (S.sentOk === 'fail') {
+    h += '<div class="btnrow"><button class="btn pri" id="rRetry">Kirim Ulang ke Google Sheet</button></div>';
+  }
+  h += '<div class="btnrow no-print">' +
+    '<button class="btn sec" id="rCsv">Unduh Bukti Jawaban (CSV)</button>' +
+    '<button class="btn sec" id="rPrint">Cetak Bukti Pengerjaan</button></div></section>';
+  h += '<section class="card"><h2><span class="dot"></span>Ulasan Jawaban</h2>' +
+    '<p class="lead">Kunci dan status kebenaran untuk soal objektif. Jawaban uraian akan dinilai oleh guru. Nomor soal mengikuti urutan acak yang Anda terima; pada rekap guru, jawaban tetap tercatat sesuai nomor soal asli.</p><div class="review">';
+  PLAN.order.forEach(function (n) { h += reviewRow(byN(n), sk.res[n]); });
+  h += '</div></section><footer class="foot">LKPD Interaktif Kimia Kelas X &mdash; Struktur Atom &amp; Sistem Periodik Unsur</footer>';
+  main.innerHTML = h; main.classList.remove('overlap');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  const rr = el('#rRetry'); if (rr) { rr.onclick = async function () { rr.disabled = true; rr.textContent = 'Mengirim ...'; try { const o = await kirimData(S.payload); S.sentOk = o.silent ? 'silent' : 'ok'; saveState(); showResult(); toast('Pengiriman ulang berhasil.'); } catch (e) { rr.disabled = false; rr.textContent = 'Kirim Ulang ke Google Sheet'; toast('Gagal: ' + e.message); } }; }
+  const rc = el('#rCsv'); if (rc) { rc.onclick = downloadCSV; }
+  const rp = el('#rPrint'); if (rp) { rp.onclick = function () { window.print(); }; }
+  saveState();
+}
+
+function secChips(res) {
+  return ['A', 'B', 'C', 'D'].map(function (s) {
+    const list = QUESTIONS.filter(function (q) { return q.sec === s; });
+    let got = 0, max = 0;
+    list.forEach(function (q) { max += q.poin; if (res[q.n]) { got += res[q.n].sk; } });
+    const lab = s === 'D' ? 'Dinilai guru' : (Math.round(got * 10) / 10) + '/' + max;
+    return '<span class="rchip">Bagian ' + s + ': <b>' + lab + '</b></span>';
+  }).join('');
+}
+
+function reviewRow(q, r) {
+  const a = S.ans[q.n]; const k = KUNCI[q.n];
+  let stCls = 'man', stTx = 'U';
+  if (q.type === 'essay') { stCls = 'man'; stTx = 'G'; }
+  else if (r.st === 'ok') { stCls = 'ok'; stTx = '\u2713'; }
+  else if (r.st === 'part') { stCls = 'part'; stTx = '~'; }
+  else { stCls = 'bad'; stTx = '\u2715'; }
+  const pt = r.sk > 0 ? r.sk : 0;
+  let head = 'Soal ' + dispN(q.n) + ' (' + q.poin + ' poin' + (q.type === 'essay' ? ' - dinilai guru' : ' - skor ' + pt) + ')';
+  let body = '<div style="margin-bottom:8px">' + q.q + '</div>';
+  if (q.type === 'mc' || q.type === 'multi') {
+    const jaw = ansLettersDisp(q.n) || '(tidak dijawab)';
+    const kk = kunciLettersDisp(q.n);
+    const benar = r.st === 'ok';
+    body += '<div class="rkey ' + (benar ? '' : 'w') + '">Jawaban Anda: <b>' + esc(jaw) + '</b>' +
+      (benar ? ' &mdash; benar' : '') + '</div>';
+    if (!benar) { body += '<div class="rkey">Kunci: <b>' + esc(kk) + '</b></div>'; }
+    if (q.type === 'multi' && r.st === 'part') { body += '<div class="rkey n">Skor parsial: sebagian pilihan benar.</div>'; }
+  } else if (q.type === 'blank') {
+    const toks = tokensOf(q);
+    let jaw = toks.map(function (t) { return String((a || {})[t] == null ? '' : a[t]).trim() || '(kosong)'; }).join(' | ');
+    const kk = toks.map(function (t) { return (k[t] || []).join(' / '); }).join(' | ');
+    body += '<div class="rkey ' + (r.st === 'ok' ? '' : 'w') + '">Jawaban Anda: <b>' + esc(jaw) + '</b>' + (r.st === 'ok' ? ' &mdash; benar' : '') + '</div>';
+    if (r.st !== 'ok') { body += '<div class="rkey">Kunci: <b>' + esc(kk) + '</b></div>'; }
+  } else {
+    body += '<div class="rkey n">Jawaban Anda: <b>' + (a && String(a).trim() ? esc(String(a).trim()) : '(tidak dijawab)') + '</b></div>';
+    body += '<div class="rkey n">Jawaban uraian akan dinilai langsung oleh guru melalui Google Sheet (maksimal ' + q.poin + ' poin).</div>';
+  }
+  return '<details><summary><span class="st ' + stCls + '">' + stTx + '</span>' + esc(head) + '</summary>' +
+    '<div class="rbody">' + body + '</div></details>';
+}
+
+/* ========================= CSV BUKTI ========================= */
+function csvCell(v) { return '"' + String(v == null ? '' : v).replace(/"/g, '""').replace(/\r?\n/g, ' ') + '"'; }
+function downloadCSV() {
+  const rows = [];
+  const head = ['Nama', 'Kelas', 'No Absen', 'Nilai Otomatis (maks 80)'];
+  QUESTIONS.forEach(function (q) { head.push('Soal ' + q.n); });
+  head.push('Urutan Bagian Tampil');
+  head.push('Urutan Soal Tampil');
+  head.push('Waktu Kirim');
+  rows.push(head.join(';'));
+  const row = [IDENT.nama, IDENT.kelas, IDENT.absen, (typeof S.nilai === 'number' ? S.nilai : '')];
+  QUESTIONS.forEach(function (q) { row.push(S.payload && S.payload.jawaban ? (S.payload.jawaban[q.n] || '') : ''); });
+  row.push(urutBagian().join('-'));
+  row.push(PLAN.order.join('-'));
+  row.push(new Date().toLocaleString('id-ID'));
+  rows.push(row.map(csvCell).join(';'));
+  const blob = new Blob(['\ufeff' + rows.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'bukti-jawaban-' + (IDENT.nama || 'siswa').replace(/[^\w\-]+/g, '_') + '.csv';
+  document.body.appendChild(a); a.click();
+  setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  toast('Bukti jawaban berhasil diunduh.');
+}
+
+/* ========================= PENGATURAN (GURU) ========================= */
+function openSettings() {
+  const url = localStorage.getItem(CONFIG.simpanKey + ':url') || CONFIG.appsScriptUrl || '';
+  const st = url.trim() ? '<span class="status ok">Tersambung</span>' : '<span class="status no">Belum diatur</span>';
+  openModal('<h3>Pengaturan Koneksi Google Sheet ' + st + '</h3>' +
+    '<div class="setrow"><label>URL Web App Apps Script (akhiran /exec)</label>' +
+    '<input type="text" id="setUrl" placeholder="https://script.google.com/macros/s/....../exec" value="' + esc(url) + '"></div>' +
+    '<div class="mrow"><button class="btn sec" id="setTest">Uji Koneksi</button>' +
+    '<button class="btn sec" id="setDel">Hapus</button>' +
+    '<button class="btn pri" id="setSave">Simpan</button></div>' +
+    '<div class="snote"><b>Uji Koneksi</b> akan mengirim satu baris uji bernama "UJI KONEKSI" ke Google Sheet. ' +
+    'Jika baris tersebut muncul, koneksi berhasil dan baris uji dapat dihapus manual di Sheet. ' +
+    'Langkah lengkap tersedia pada dokumen Panduan Pemasangan.</div>');
+  el('#setSave').onclick = function () {
+    const v = el('#setUrl').value.trim();
+    localStorage.setItem(CONFIG.simpanKey + ':url', v);
+    toast(v ? 'URL tersimpan di browser ini.' : 'URL dihapus.');
+    closeModal();
+  };
+  el('#setDel').onclick = function () {
+    localStorage.removeItem(CONFIG.simpanKey + ':url');
+    toast('URL dihapus dari browser ini.');
+    closeModal();
+  };
+  el('#setTest').onclick = async function () {
+    const v = el('#setUrl').value.trim();
+    if (!v) { toast('Isi URL terlebih dahulu.'); return; }
+    const b = el('#setTest'); b.disabled = true; b.textContent = 'Menguji ...';
+    const payload = { test: true, app: 'LKPD-KIMIA-X', judul: CONFIG.judul, waktu: new Date().toISOString(), jawaban: {} };
+    let msg = '', ok = false;
+    try {
+      const r = await fetch(v, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload), redirect: 'follow' });
+      const j = await r.json();
+      if (j.status === 'ok') { ok = true; msg = 'Koneksi berhasil. Baris UJI KONEKSI muncul di Google Sheet (silakan hapus baris itu).'; }
+      else { msg = 'Server menolak: ' + (j.message || 'tidak diketahui'); }
+    } catch (e1) {
+      try {
+        await fetch(v, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
+        ok = true; msg = 'Terkirim (mode sederhana). Cek Google Sheet untuk baris UJI KONEKSI, lalu hapus baris itu.';
+      } catch (e2) { msg = 'Gagal terhubung. Pastikan URL berakhiran /exec dan deployment "Anyone".'; }
+    }
+    b.disabled = false; b.textContent = 'Uji Koneksi';
+    toast(msg, 5200);
+  };
+}
+
+/* ========================= INIT ========================= */
+function init() {
+  restoreState();
+  renderQuiz();
+
+  /* pulihkan isian yang tersimpan ke elemen */
+  QUESTIONS.forEach(function (q) {
+    const card = el('#qc' + q.n);
+    if (!card) { return; }
+    const a = S.ans[q.n];
+    if (q.type === 'mc' && typeof a === 'number') {
+      const inp = card.querySelector('input[value="' + a + '"]');
+      if (inp) { inp.checked = true; }
+      refreshOpts(card, q.n);
+    } else if (q.type === 'multi' && Array.isArray(a)) {
+      a.forEach(function (i) {
+        const inp = card.querySelector('input[value="' + i + '"]');
+        if (inp) { inp.checked = true; }
+      });
+      refreshOpts(card, q.n);
+    } else if (q.type === 'blank' && a) {
+      Object.keys(a).forEach(function (t) {
+        const inp = card.querySelector('input[data-b="' + t + '"]');
+        if (inp) { inp.value = a[t]; }
+      });
+    } else if (q.type === 'essay' && typeof a === 'string') {
+      const ta = card.querySelector('textarea');
+      if (ta) { ta.value = a; }
+      updateEssayCount(q.n);
+    }
+  });
+
+  el('#fNama').addEventListener('input', function () { IDENT.nama = this.value; this.classList.remove('err'); saveState(); });
+  el('#fKelas').addEventListener('input', function () { IDENT.kelas = this.value; this.classList.remove('err'); saveState(); });
+  el('#fAbsen').addEventListener('input', function () { IDENT.absen = this.value; saveState(); });
+
+  el('#btnSend').onclick = function () { sendFlow(false); };
+  el('#btnCheck').onclick = function () {
+    const miss = collectMissing();
+    if (!miss.length) { markMissing([]); toast('Semua soal sudah terisi. Siap dikirim!'); return; }
+    markMissing(miss);
+    toast(miss.length + ' soal belum dijawab / belum lengkap (ditandai kuning).');
+    const c = el('#qc' + miss[0]);
+    if (c) { c.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+  };
+  el('#btnGear').onclick = openSettings;
+  el('#mwrap').addEventListener('click', function (e) { if (e.target === this) { closeModal(); } });
+
+  initTimer();
+  updateProgress();
+  el('#topbar').classList.add('show');
+
+  window.addEventListener('beforeunload', function (e) {
+    if (!S.submitted && updateProgress() > 0) { e.preventDefault(); e.returnValue = ''; }
+  });
+
+  if (S.submitted && S.payload) { showResult(); }
+}
+
+init();
+
+</script>
+</body>
+</html>
